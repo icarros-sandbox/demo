@@ -1,0 +1,28 @@
+name: Check PR Source Branch
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize] # Gatilho: quando um PR é aberto, reaberto ou atualizado
+
+jobs:
+  check_source:
+    runs-on: ubuntu-latest # O ambiente onde o job será executado
+
+    steps:
+    - name: Check if PR is to main from dev
+      run: |
+        # Pega o nome da branch base (destino do PR)
+        BASE_BRANCH="${{ github.base_ref }}"
+        # Pega o nome da branch head (origem do PR)
+        HEAD_BRANCH="${{ github.head_ref }}"
+
+        echo "Base branch: $BASE_BRANCH"
+        echo "Head branch: $HEAD_BRANCH"
+
+        # Verifica se a branch base é 'main' E a branch head NÃO é 'dev'
+        if [[ "$BASE_BRANCH" == "main" && "$HEAD_BRANCH" != "dev" ]]; then
+          echo "::error::Pull requests to 'main' must originate ONLY from the 'dev' branch. Please close this PR and open one from 'dev'."
+          exit 1 # Falha o job
+        else
+          echo "PR source branch check passed."
+        fi
