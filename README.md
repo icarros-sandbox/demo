@@ -36,3 +36,5 @@ graph LR
 ```
 
 Este fluxo garante que todas as mudanças passem por revisão técnica e validação antes de serem promovidas para produção, com rastreabilidade e controle via GitHub Actions e regras de proteção.
+
+teste02
